@@ -8,5 +8,20 @@ with open('grants.csv', encoding = 'CP1251') as file: #открываем фай
             print(f'Вы получили {prize} рублей в конкурсе {nomination} с номером заявки {project_id}')
             break
 
-    sum_prize, count_nomination = {}, {}
-    for 
+    sum_nomination, count_nomination = {}, {}
+    for person in person_list:
+        print(person)
+        if person[-2] in count_nomination:
+            count_nomination[person[-2]] += 1
+        else:
+            count_nomination[person[-2]] = 1
+
+        sum_nomination[person[-2]] = sum_nomination.get(person[-2], 0) + (int(person[-1]) if person[-1] != 'NULL' else 0)
+    for person in person_list:
+        if person[-1] == 'NULL':
+            person[-1] = round(sum_nomination[person[-2]] / count_nomination[person[-2]], 3)
+
+with open('person_new.csv', 'w', newline='', encoding='CP1251') as file:
+    writer = csv.writer(file)
+    writer.writerow(['id', 'Full_Name', 'project_id', 'nomination', 'prize'])
+    writer.writerows(person_list)
