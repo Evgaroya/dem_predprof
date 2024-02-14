@@ -1,0 +1,22 @@
+import csv
+
+with open('grants.csv') as file:
+    reader = list(csv.DictReader(file, delimiter = ';', quotecher = '"'))
+    for i in range(len(reader)):
+        cursor = reader[i]
+        pos = i
+        while pos > 0 and \
+                int(reader[pos - 1]['score'] if reader[pos - 1]['score'] != 'None' else 0) < cursor_score:
+            reader[pos] = reader[pos - 1]
+            pos = pos - 1
+        reader[pos] = cursor
+    
+    print('10 класс:')
+    count = 1
+    for student in reader:
+        if '10' in student['class']:
+            surname, name, patronymic = student['Name'].split()
+            print(f'{count} место:{name[0]}. {surname}')
+            count += 1
+        if count > 3:
+            break
